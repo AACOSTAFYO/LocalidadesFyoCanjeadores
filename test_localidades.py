@@ -137,7 +137,7 @@ class TestLocalidadMatcher(unittest.TestCase):
     def test_matcher_sin_lista_fallback(self):
         """Test que el matcher funciona sin lista de fallback."""
         matcher = LocalidadMatcher(self.lista_principal)
-        resultado = self.matcher.buscar_localidad("Acassuso")
+        resultado = matcher.buscar_localidad("Acassuso")
         self.assertIsNotNone(resultado)
         
         # Sin fallback, no encuentra localidades que no estén en principal
