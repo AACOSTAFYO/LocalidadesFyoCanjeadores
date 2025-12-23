@@ -6,6 +6,10 @@ from dataclasses import dataclass
 from difflib import SequenceMatcher
 
 
+# Umbral mínimo de similitud para considerar una coincidencia válida
+SIMILITUD_MINIMA = 0.3
+
+
 @dataclass
 class Localidad:
     """Representa una localidad con su partido y provincia."""
@@ -34,7 +38,8 @@ def similitud_texto(texto1: str, texto2: str) -> float:
 def encontrar_localidad(
     localidad_buscada: str,
     lista_principal: List[Localidad],
-    lista_referencia: Optional[List[Localidad]] = None
+    lista_referencia: Optional[List[Localidad]] = None,
+    umbral_similitud: float = SIMILITUD_MINIMA
 ) -> Optional[Localidad]:
     """
     Busca una localidad en la lista principal. Si no se encuentra, busca en la lista de referencia
@@ -51,6 +56,7 @@ def encontrar_localidad(
         localidad_buscada: Nombre de la localidad a buscar
         lista_principal: Lista de localidades disponibles (lista A)
         lista_referencia: Lista de localidades de referencia (lista B). Si es None, usa lista_principal
+        umbral_similitud: Umbral mínimo de similitud (0.0 a 1.0) para considerar una coincidencia válida
         
     Returns:
         Localidad encontrada o None si no hay coincidencias
@@ -74,7 +80,7 @@ def encontrar_localidad(
             localidad_ref = localidad
     
     # Si no se encontró ninguna referencia razonable, retornar None
-    if localidad_ref is None or mejor_similitud_ref < 0.3:
+    if localidad_ref is None or mejor_similitud_ref < umbral_similitud:
         return None
     
     # 3. Buscar en lista principal con mismo partido (prioridad)
@@ -112,10 +118,17 @@ def encontrar_localidad(
 def encontrar_localidad_detallado(
     localidad_buscada: str,
     lista_principal: List[Localidad],
-    lista_referencia: Optional[List[Localidad]] = None
+    lista_referencia: Optional[List[Localidad]] = None,
+    umbral_similitud: float = SIMILITUD_MINIMA
 ) -> Dict:
     """
     Versión detallada que retorna información sobre el proceso de búsqueda.
+    
+    Args:
+        localidad_buscada: Nombre de la localidad a buscar
+        lista_principal: Lista de localidades disponibles (lista A)
+        lista_referencia: Lista de localidades de referencia (lista B). Si es None, usa lista_principal
+        umbral_similitud: Umbral mínimo de similitud (0.0 a 1.0) para considerar una coincidencia válida
     
     Returns:
         Dict con:
@@ -152,7 +165,7 @@ def encontrar_localidad_detallado(
             mejor_similitud_ref = similitud
             localidad_ref = localidad
     
-    if localidad_ref is None or mejor_similitud_ref < 0.3:
+    if localidad_ref is None or mejor_similitud_ref < umbral_similitud:
         return resultado
     
     resultado['referencia'] = localidad_ref

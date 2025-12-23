@@ -5,6 +5,10 @@ import unittest
 from localidades import Localidad, encontrar_localidad, encontrar_localidad_detallado, similitud_texto
 
 
+# Constante para pruebas de localidades no existentes
+LOCALIDAD_INEXISTENTE = "XYZ123ABC"
+
+
 class TestSimilitudTexto(unittest.TestCase):
     """Tests para la función de similitud de texto."""
     
@@ -73,7 +77,7 @@ class TestEncontrarLocalidad(unittest.TestCase):
     def test_localidad_no_encontrada(self):
         """Debe retornar None cuando no se encuentra ninguna coincidencia."""
         # Usar un nombre totalmente diferente sin similitud
-        resultado = encontrar_localidad("XYZ123ABC", self.lista_principal, self.lista_referencia)
+        resultado = encontrar_localidad(LOCALIDAD_INEXISTENTE, self.lista_principal, self.lista_referencia)
         self.assertIsNone(resultado)
     
     def test_sin_lista_referencia(self):
@@ -127,7 +131,7 @@ class TestEncontrarLocalidadDetallado(unittest.TestCase):
     def test_metodo_no_encontrada(self):
         """Debe indicar 'no_encontrada' cuando no hay coincidencia."""
         resultado = encontrar_localidad_detallado(
-            "XYZ123", self.lista_principal, self.lista_referencia
+            LOCALIDAD_INEXISTENTE, self.lista_principal, self.lista_referencia
         )
         self.assertEqual(resultado['metodo'], 'no_encontrada')
         self.assertIsNone(resultado['encontrada'])
