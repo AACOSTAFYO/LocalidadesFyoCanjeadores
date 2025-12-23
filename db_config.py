@@ -67,7 +67,7 @@ class DatabaseConnection:
                 cursor.execute(query)
             
             # Check if cursor has results by checking description
-            # cursor.description is None for non-SELECT statements
+            # cursor.description is None for statements that don't return result sets
             if cursor.description:
                 return cursor.fetchall()
             else:
