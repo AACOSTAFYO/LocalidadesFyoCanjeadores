@@ -66,8 +66,9 @@ class DatabaseConnection:
             else:
                 cursor.execute(query)
             
-            # Check if it's a SELECT query
-            if query.strip().upper().startswith('SELECT'):
+            # Check if cursor has results by checking description
+            # cursor.description is None for non-SELECT statements
+            if cursor.description:
                 return cursor.fetchall()
             else:
                 self.connection.commit()

@@ -57,14 +57,22 @@ class ExcelReader:
         list_b = []
         
         # Read data from columns A and B
+        skip_first_row = False
         for row_idx, row in enumerate(sheet.iter_rows(min_row=1, max_col=2, values_only=True), start=1):
             col_a_value, col_b_value = row
             
-            # Skip header row if it contains non-numeric values
+            # Check if first row is a header row
             if row_idx == 1:
-                # Check if first row is a header
+                # Common header names to detect
+                header_keywords = ['lista', 'list', 'nombre', 'name', 'valor', 'value', 'a', 'b']
                 if isinstance(col_a_value, str) and isinstance(col_b_value, str):
-                    continue
+                    # Check if both values look like headers (short strings matching common patterns)
+                    a_lower = col_a_value.lower().strip()
+                    b_lower = col_b_value.lower().strip()
+                    if any(keyword in a_lower for keyword in header_keywords) and \
+                       any(keyword in b_lower for keyword in header_keywords):
+                        skip_first_row = True
+                        continue
             
             # Add values to lists if they are not None
             if col_a_value is not None:

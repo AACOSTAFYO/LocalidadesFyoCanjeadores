@@ -23,10 +23,8 @@ class DataPersistence:
         print("Creating database tables...")
         try:
             create_sql = DatabaseSchema.create_tables_sql()
-            # Split by GO statements and execute each batch
-            statements = [s.strip() for s in create_sql.split('GO') if s.strip()]
-            for statement in statements:
-                self.db_connection.execute_query(statement)
+            # Execute the entire SQL block as pyodbc can handle multiple statements
+            self.db_connection.execute_query(create_sql)
             print("Tables created successfully.")
         except Exception as e:
             print(f"Error creating tables: {e}")
