@@ -39,3 +39,7 @@ Thumbs.db
 
 # Excel temporary files
 ~$*.xlsx
+sample_data.xlsx
+
+# Test files
+test_*.py
